@@ -13,11 +13,16 @@ export default function Login() {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const [alertError, setAlertError] = React.useState(false);
+	const [alertError, setAlertError] = React.useState({
+		isError: location.state?.isError,
+		message: location.state?.message,
+	});
 	const [alertSuccess, setAlertSuccess] = React.useState({
 		isSuccess: location.state?.isSuccess,
 		message: location.state?.message,
 	});
+
+	console.log(alertError);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -54,12 +59,16 @@ export default function Login() {
 				.then((response) =>
 					response.data.success
 						? setTokenAndGetAuthUser(response.data.token)
-						: setAlertError(true)
+						: setAlertError({
+								isError: true,
+								message:
+									'Upaya masuk gagal, pengguna tidak ditemukan. Periksa kembali email dan password Anda.',
+						  })
 				)
 				.catch((e) => console.log(e));
 		};
 
-		if (alertError) return;
+		if (alertError.isError) return;
 
 		getToken();
 	};
@@ -71,17 +80,21 @@ export default function Login() {
 				replace: true,
 			});
 		} else if (user.role === '2') {
-			navigate('/', { state: { user: user, token: token }, replace: true });
+			localStorage.setItem(
+				'credentials',
+				JSON.stringify({ user: user, token: token })
+			);
+			navigate('/', { replace: true });
+			window.location.reload();
 		}
 	}, [user]);
 
 	return (
 		<section className="bg-gray-100 dark:bg-gray-900">
-			{alertError ? (
+			{alertError.isError ? (
 				<AlertError
-					message="Upaya masuk gagal, pengguna tidak ditemukan. Periksa kembali email dan
-					password Anda."
-					setAlertError={() => setAlertError(false)}
+					message={alertError.message}
+					setAlertError={() => setAlertError({ isError: false })}
 				/>
 			) : (
 				''

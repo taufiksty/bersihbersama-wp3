@@ -1,0 +1,12 @@
+html {
+  scroll-behavior: smooth;
+}
+
+ion-icon {
+  color: #65a30d;
+}
+
+#add-circle {
+  color: white;
+  margin-left: 5px;
+}

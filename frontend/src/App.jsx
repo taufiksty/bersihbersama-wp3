@@ -5,6 +5,8 @@ import Login from './components/login';
 import Register from './components/register';
 import './App.css';
 import Dashboard from './components/dashboardAdmin';
+import EventUser from './components/eventUser';
+import BlogUser from './components/blogUser';
 
 function App() {
 	return (
@@ -25,6 +27,14 @@ function App() {
 				<Route
 					path="/admin"
 					element={<Dashboard />}
+				/>
+				<Route
+					path="/events"
+					element={<EventUser />}
+				/>
+				<Route
+					path="/blogs"
+					element={<BlogUser />}
 				/>
 			</Routes>
 		</Router>
