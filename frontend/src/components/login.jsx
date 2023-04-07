@@ -22,8 +22,6 @@ export default function Login() {
 		message: location.state?.message,
 	});
 
-	console.log(alertError);
-
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
@@ -75,10 +73,15 @@ export default function Login() {
 
 	React.useEffect(() => {
 		if (user.role === '1') {
+			localStorage.setItem(
+				'credentials',
+				JSON.stringify({ user: user, token: token })
+			);
 			navigate('/admin', {
 				state: { user: user, token: token },
 				replace: true,
 			});
+			window.location.reload();
 		} else if (user.role === '2') {
 			localStorage.setItem(
 				'credentials',

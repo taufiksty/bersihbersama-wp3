@@ -22,7 +22,7 @@ class UsersSeeder extends Seeder
                 'province' => 'Jawa Barat',
                 'sm_account' => $faker->userName,
                 'role' => '2',
-                'image' => 'profileDefault.png',
+                'image' => 'default.png',
                 'created_at' => $date->format('Y-m-d H:i:s'),
                 'updated_at' => $date->format('Y-m-d H:i:s')
             ];

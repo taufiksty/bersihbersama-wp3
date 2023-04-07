@@ -71,8 +71,8 @@ class Filters extends BaseConfig
             'before' => ['api/*'],
             'after' => ['api/*']
         ],
-        'auth' => [
-            'before' => ['api/v1/users/*']
-        ]
+        // 'auth' => [
+        //     'before' => ['api/v1/users/*']
+        // ]
     ];
 }

@@ -63,7 +63,7 @@ class Users extends Migration
             'image' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
-                'default' => 'profileDefault.png'
+                'default' => 'default.png'
             ],
             'created_at' => [
                 'type' => 'DATETIME',

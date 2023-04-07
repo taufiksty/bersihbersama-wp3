@@ -9,6 +9,13 @@ import EventUser from './components/eventUser';
 import BlogUser from './components/blogUser';
 
 function App() {
+	const [isAuthenticated, setIsAuthenticated] = React.useState(
+		localStorage.getItem('credentials') ? true : false
+	);
+	const [role, setRole] = React.useState(
+		JSON.parse(localStorage.getItem('credentials'))?.user.role || 0
+	);
+
 	return (
 		<Router>
 			<Routes>
@@ -26,7 +33,7 @@ function App() {
 				/>
 				<Route
 					path="/admin"
-					element={<Dashboard />}
+					element={isAuthenticated && role == 1 ? <Dashboard /> : <Login />}
 				/>
 				<Route
 					path="/events"
