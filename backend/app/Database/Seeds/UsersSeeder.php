@@ -15,7 +15,7 @@ class UsersSeeder extends Seeder
             $data = [
                 'name' => $faker->name,
                 'email' => $faker->email,
-                'password' => password_hash($faker->password, PASSWORD_DEFAULT),
+                'password' => password_hash('password', PASSWORD_DEFAULT),
                 'address' => $faker->address,
                 'district' => 'Limo',
                 'city' => $faker->city,
