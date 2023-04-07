@@ -37,7 +37,23 @@ $routes->group('api/v1', ['filter' => 'auth', 'filter' => 'cors'], function ($ro
     $routes->get('users/(:num)', 'UserController::show/$1');
     $routes->post('users/update/(:num)', 'UserController::update/$1');
     $routes->delete('users/(:num)', 'UserController::delete/$1');
+    
     $routes->get('auth/user', 'AuthController::authUser');
+    
+    $routes->get('events/', 'EventsController::index');
+    $routes->post('events/', 'EventsController::create');
+    $routes->get('events/(:num)', 'EventsController::show/$1'); 
+    $routes->post('events/update/(:num)', 'EventsController::update/$1');
+    $routes->delete('events/(:num)', 'EventsController::delete/$1');
+
+    
+    $routes->get('reports/', 'ReportsController::index');
+    $routes->post('reports/', 'ReportsController::create');
+    $routes->get('reports/(:num)', 'ReportsController::show/$1'); 
+    $routes->post('reports/update/(:num)', 'ReportsController::update/$1');
+    $routes->delete('reports/(:num)', 'ReportsController::delete/$1');
+
+
 });
 $routes->post('api/v1/users', 'UserController::create');
 $routes->post('api/v1/auth/token', 'AuthController::login');

@@ -67,7 +67,7 @@ class UserController extends ResourceController
     {
         helper(['form']);
         $data = json_decode($this->request->getVar('data'));
-        $image = $_FILES['image'];
+        $image = $this->request->getFiles();
 
         // if (!$data->validate([
         //     'email' => 'required|is_unique[Users.email]',

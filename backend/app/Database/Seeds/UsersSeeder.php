@@ -15,14 +15,14 @@ class UsersSeeder extends Seeder
             $data = [
                 'name' => $faker->name,
                 'email' => $faker->email,
-                'password' => password_hash($faker->password, PASSWORD_DEFAULT),
+                'password' => password_hash('password', PASSWORD_DEFAULT),
                 'address' => $faker->address,
                 'district' => 'Limo',
                 'city' => $faker->city,
                 'province' => 'Jawa Barat',
                 'sm_account' => $faker->userName,
                 'role' => '2',
-                'image' => 'profileDefault.png',
+                'image' => 'default.png',
                 'created_at' => $date->format('Y-m-d H:i:s'),
                 'updated_at' => $date->format('Y-m-d H:i:s')
             ];

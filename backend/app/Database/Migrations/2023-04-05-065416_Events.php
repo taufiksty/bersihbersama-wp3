@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Users extends Migration
+class Events extends Migration
 {
     public function up()
     {
@@ -15,55 +15,62 @@ class Users extends Migration
                 'unsigned' => true,
                 'auto_increment' => true
             ],
-            'name' => [
+            'title' => [
                 'type' => 'VARCHAR',
                 'constraint' => 100,
-                'null' => false
+                'null' => false,
             ],
-            'email' => [
+            'description' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
                 'null' => false
             ],
-            'password' => [
-                'type' => 'VARCHAR',
-                'constraint' => 255,
+            'date' => [
+                'type' => 'DATE',
+                'null' => false
+            ],
+            'total_people' => [
+                'type' => 'INT',
+                'constraint' => 5,
                 'null' => false
             ],
             'address' => [
                 'type' => 'VARCHAR',
                 'constraint' => 100,
-                'null' => true
+                'null' => false
             ],
             'district' => [
                 'type' => 'VARCHAR',
                 'constraint' => 100,
-                'null' => true
+                'null' => false
             ],
             'city' => [
                 'type' => 'VARCHAR',
                 'constraint' => 100,
-                'null' => true
+                'null' => false
             ],
             'province' => [
                 'type' => 'VARCHAR',
                 'constraint' => 100,
-                'null' => true
+                'null' => false
             ],
-            'sm_account' => [
-                'type' => 'VARCHAR',
-                'constraint' => 100,
-                'null' => true
+            'link_map' => [
+                'type' => 'TEXT',
+                'null' => false
             ],
-            'role' => [
+            'images' => [
+                'type' => 'LONGTEXT',
+                'null' => false
+            ],
+            'done' => [
                 'type' => 'ENUM',
                 'constraint' => ['1', '2'],
-                'default' => '2'
+                'null' => false
             ],
-            'image' => [
+            'link_groupwa' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
-                'default' => 'default.png'
+                'null' => false
             ],
             'created_at' => [
                 'type' => 'DATETIME',
@@ -73,11 +80,12 @@ class Users extends Migration
             ]
         ]);
         $this->forge->addPrimaryKey('id');
-        $this->forge->createTable('Users', true);
+        $this->forge->createTable('Events', true);
     }
 
     public function down()
     {
-        $this->forge->dropTable('Users');
+        
+        $this->forge->dropTable('Events');
     }
 }
