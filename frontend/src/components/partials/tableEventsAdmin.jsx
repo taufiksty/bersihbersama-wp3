@@ -3,7 +3,7 @@ import axios from 'axios';
 import ModalUpdateUser from './modalUpdateUser';
 import { useNavigate } from 'react-router-dom';
 
-export default function TableAdmin(props) {
+export default function TableEventsAdmin(props) {
 	const [data, setData] = React.useState([]);
 	const [search, setSearch] = React.useState('');
 	const [showModalUpdateUser, setShowModalUpdateUser] = React.useState({
