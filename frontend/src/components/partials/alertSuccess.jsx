@@ -4,7 +4,7 @@ export default function AlertSuccess(props) {
 	return (
 		<div
 			id="alert-3"
-			className="flex fixed w-full p-4 mb-4 text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+			className={`flex w-full ${props.w != undefined ? props.w : 'fixed mb-4'} p-4 text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400`}
 			role="alert">
 			<svg
 				aria-hidden="true"

@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class Reports extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'reports';
+    protected $table            = 'Reports';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;
@@ -17,7 +17,7 @@ class Reports extends Model
     protected $allowedFields    = ['title', 'description', 'address', 'district', 'city', 'province', 'user_id', 'link_map', 'images', 'status'];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
@@ -38,4 +38,21 @@ class Reports extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function search($keyword)
+    {
+        return $this->like('title', $keyword)
+            ->orLike('address', $keyword)
+            ->orLike('district', $keyword)
+            ->orLike('city', $keyword)
+            ->orLike('province', $keyword)
+            ->orLike('user_id', $keyword)
+            ->orLike('status', $keyword)
+            ->orLike('created_at', $keyword);
+    }
+
+    public function searchByUserId($user_id)
+    {
+        return $this->like('user_id', $user_id);
+    }
 }

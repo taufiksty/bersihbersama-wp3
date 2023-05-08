@@ -1,18 +1,18 @@
 import React from 'react';
 import axios from 'axios';
-import ModalUpdateUser from './modalUpdateUser';
 import { useNavigate } from 'react-router-dom';
+import ModalShowReport from './modalShowReport';
 
 export default function TableReportsAdmin(props) {
 	const [data, setData] = React.useState([]);
 	const [search, setSearch] = React.useState('');
-	const [showModalUpdateUser, setShowModalUpdateUser] = React.useState({
+	const [showModalShowReport, setShowModalShowReport] = React.useState({
 		isShow: false,
-		user: {},
+		report: {},
 	});
-	const [showModalDeleteUser, setShowModalDeleteUser] = React.useState({
+	const [showModalDeleteReport, setShowModalDeleteReport] = React.useState({
 		isShow: false,
-		user: {},
+		report: {},
 	});
 
 	const navigate = useNavigate();
@@ -45,25 +45,29 @@ export default function TableReportsAdmin(props) {
 		getDataSearch();
 	};
 
-	const ModalDeleteUser = (props) => {
+	const ModalDeleteReport = (props) => {
 		const handleDelete = (e) => {
 			e.preventDefault();
-			const id = showModalDeleteUser.user.id;
+			const id = showModalDeleteReport.report.id;
 			axios
-				.delete(`http://localhost:8080/api/v1/users/${id}`, {
+				.delete(`http://localhost:8080/api/v1/reports/${id}`, {
 					headers: { Authorization: `Bearer ${props.token}` },
 				})
 				.then((response) => {
 					console.log(response.data);
 					if (response.data.success) {
-						setShowModalDeleteUser({ isShow: false, user: {} });
+						setShowModalDeleteReport({ isShow: false, report: {} });
 						navigate('/admin', {
-							state: { isSuccess: true, message: 'Perubahan berhasil.' },
+							state: {
+								menu: 'reports',
+								isSuccess: true,
+								message: 'Aduan berhasil dihapus.',
+							},
 						});
 						window.location.reload();
 					}
 				})
-				.catch((error) => console.log(e));
+				.catch((error) => console.log(error));
 		};
 
 		return (
@@ -77,7 +81,7 @@ export default function TableReportsAdmin(props) {
 							type="button"
 							className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
 							onClick={() =>
-								setShowModalDeleteUser({ isShow: false, user: {} })
+								setShowModalDeleteReport({ isShow: false, report: {} })
 							}>
 							<svg
 								aria-hidden="true"
@@ -117,7 +121,7 @@ export default function TableReportsAdmin(props) {
 							</button>
 							<button
 								onClick={() =>
-									setShowModalDeleteUser({ isShow: false, user: {} })
+									setShowModalDeleteReport({ isShow: false, report: {} })
 								}
 								type="button"
 								className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
@@ -136,59 +140,56 @@ export default function TableReportsAdmin(props) {
 			let keys = Object.keys(dataColumns || {});
 			return keys.map((name, i) => {
 				return name == 'id' ||
-					name == 'created_at' ||
 					name == 'updated_at' ||
-					name == 'password' ? (
+					name == 'description' ||
+					name == 'link_map' ||
+					name == 'images' ? (
 					''
 				) : (
 					<th
 						key={i}
 						scope="col"
 						className="px-6 py-3">
-						{name == 'sm_account' ? 'Social Media Account' : name}
+						{name == 'user_id' ? 'User ID' : name}
 					</th>
 				);
 			});
 		};
 
-		const RowUsers = () => {
+		const RowEvents = () => {
 			return data.map((item, i) => (
 				<tr
-					className="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
+					className={`border-b dark:bg-gray-900 dark:border-gray-700 ${
+						item.status == 0 ? 'bg-primary-100' : 'bg-white'
+					}`}
 					key={i}>
 					<th
 						scope="row"
 						className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-						{item.name}
+						{item.title}
 					</th>
-					<td className="px-6 py-4">{item.email}</td>
 					<td className="px-6 py-4">{item.address}</td>
 					<td className="px-6 py-4">{item.district}</td>
 					<td className="px-6 py-4">{item.city}</td>
 					<td className="px-6 py-4">{item.province}</td>
-					<td className="px-6 py-4">{item.sm_account}</td>
+					<td className="px-6 py-4">{item.user_id}</td>
 					<td className="px-6 py-4">
-						{item.role == '1' ? 'Admin' : 'Partisipan'}
+						{item.status == 0 ? 'Belum diterima' : 'Diterima'}
 					</td>
-					<td className="px-6 py-4">
-						<img
-							src={`http://localhost:8080/images/profile/${item.image}`}
-							alt="user's profile"
-						/>
-					</td>
-					<td className="px-6 py-4">
+					<td className="px-6 py-4">{item.created_at}</td>
+					<td className="p-4">
 						<button
 							type="button"
-							className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-							onClick={() =>
-								setShowModalUpdateUser({ isShow: true, user: item })
-							}>
-							Ubah
+							className="font-medium text-start text-primary-600 dark:text-primary-500 hover:underline"
+							onClick={() => {
+								setShowModalShowReport({ isShow: true, report: item });
+							}}>
+							Lihat detail
 						</button>
 						<button
 							type="button"
 							onClick={() =>
-								setShowModalDeleteUser({ isShow: true, user: item })
+								setShowModalDeleteReport({ isShow: true, report: item })
 							}
 							className="button-delete font-medium block pt-2 text-red-600 dark:text-blue-500 hover:underline">
 							Hapus
@@ -199,7 +200,7 @@ export default function TableReportsAdmin(props) {
 		};
 
 		return (
-			<table className="w-full mt-2 text-xs text-left rounded shadow-md text-gray-500 dark:text-gray-400">
+			<table className="w-full mt-4 text-xs text-left rounded shadow-md text-gray-500 dark:text-gray-400">
 				<thead className="text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
 					<tr>
 						<Columns />
@@ -210,7 +211,7 @@ export default function TableReportsAdmin(props) {
 						</th>
 					</tr>
 				</thead>
-				<tbody className="overflow-y-auto">{<RowUsers />}</tbody>
+				<tbody className="overflow-y-auto">{<RowEvents />}</tbody>
 			</table>
 		);
 	};
@@ -259,21 +260,22 @@ export default function TableReportsAdmin(props) {
 						</button>
 					</div>
 				</form>
-				{showModalUpdateUser.isShow && (
-					<ModalUpdateUser
-						user={showModalUpdateUser.user}
+
+				{showModalShowReport.isShow && (
+					<ModalShowReport
+						report={showModalShowReport.report}
 						setIsShow={() =>
-							setShowModalUpdateUser({ isShow: false, user: {} })
+							setShowModalShowReport({ isShow: false, report: {} })
 						}
 						token={props.token}
 					/>
 				)}
 
-				{showModalDeleteUser.isShow && (
-					<ModalDeleteUser
-						user={showModalDeleteUser.user}
+				{showModalDeleteReport.isShow && (
+					<ModalDeleteReport
+						report={showModalDeleteReport.report}
 						setIsShow={() =>
-							setShowModalDeleteUser({ isShow: false, user: {} })
+							setShowModalDeleteReport({ isShow: false, report: {} })
 						}
 						token={props.token}
 						message="Anda yakin ingin menghapusnya?"

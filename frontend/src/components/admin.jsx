@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import TableUserAdmin from './partials/tableUserAdmin';
 import { useLocation, useNavigate } from 'react-router-dom';
 import AlertSuccess from './partials/alertSuccess';
@@ -10,12 +9,15 @@ import TableReportsAdmin from './partials/tableReportsAdmin';
 import TableBlogsAdmin from './partials/tableBlogsAdmin';
 
 export default function Dashboard() {
-	const [selectedMenu, setSelectedMenu] = React.useState('dashboard');
+	const location = useLocation();
+
+	const [selectedMenu, setSelectedMenu] = React.useState(
+		location.state?.menu || 'dashboard'
+	);
 	const [credentials, setCredentials] = React.useState(
 		JSON.parse(localStorage.getItem('credentials'))
 	);
 
-	const location = useLocation();
 	const navigate = useNavigate();
 
 	const [alertSuccess, setAlertSuccess] = React.useState({
@@ -62,8 +64,7 @@ export default function Dashboard() {
 								...oldState,
 								isSuccess: false,
 							}));
-							history.replaceState(alertSuccess, '');
-							window.location.reload();
+							history.replaceState(location.state, null);
 						}}
 					/>
 				) : (
@@ -116,7 +117,7 @@ export default function Dashboard() {
 									</button>
 								</div>
 								<div
-									className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
+									className="z-50 hidden m-0 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
 									id="dropdown-user">
 									<div
 										className="px-4 py-3"
@@ -230,8 +231,8 @@ export default function Dashboard() {
 									xmlns="http://www.w3.org/2000/svg"
 									aria-hidden="true">
 									<path
-										clip-rule="evenodd"
-										fill-rule="evenodd"
+										clipRule="evenodd"
+										fillRule="evenodd"
 										d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"></path>
 								</svg>
 								<span
@@ -277,8 +278,8 @@ export default function Dashboard() {
 									xmlns="http://www.w3.org/2000/svg"
 									aria-hidden="true">
 									<path
-										clip-rule="evenodd"
-										fill-rule="evenodd"
+										clipRule="evenodd"
+										fillRule="evenodd"
 										d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm2.25 8.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 3a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z"></path>
 								</svg>
 								<span
@@ -297,6 +298,10 @@ export default function Dashboard() {
 				<Dasbor
 					name={selectedMenu}
 					token={credentials.token}
+					setSelectedMenuUsers={() => setSelectedMenu('users')}
+					setSelectedMenuEvents={() => setSelectedMenu('events')}
+					setSelectedMenuReports={() => setSelectedMenu('reports')}
+					setSelectedMenuBlogs={() => setSelectedMenu('blogs')}
 				/>
 			)}
 

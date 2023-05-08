@@ -5,8 +5,6 @@ namespace App\Controllers;
 use CodeIgniter\RESTful\ResourceController;
 use App\Models\Users;
 use CodeIgniter\API\ResponseTrait;
-use CodeIgniter\HTTP\IncomingRequest;
-use CodeIgniter\HTTP\Request;
 
 class UserController extends ResourceController
 {
@@ -16,16 +14,21 @@ class UserController extends ResourceController
     {
         $search = $this->request->getVar('search');
         if (!is_null($search)) {
-            $db_user = new Users;
-            $user = $db_user->search($search)->get()->getResult();
+            $db_users = new Users;
+            $users = $db_users->search($search)->get()->getResult();
 
-            return $this->respond(['success' => true, 'data' => $user], 200, 'OK');
+            return $this->respond(['success' => true, 'data' => $users], 200, 'OK');
         }
 
-        $db_user = new Users;
-        $user = $db_user->get()->getResult();
+        $db_users = new Users;
+        $users = $db_users->get()->getResult();
 
-        return $this->respond(['success' => true, 'data' => $user], 200, 'OK');
+        $count_admin = 0;
+        foreach ($users as $user) {
+            if ($user->role == 1) $count_admin++;
+        }
+
+        return $this->respond(['success' => true, 'data' => $users, 'total_users' => count($users), 'count_admin' => $count_admin, 'count_user' => count($users) - $count_admin], 200, 'OK');
     }
 
     public function create()
@@ -60,6 +63,8 @@ class UserController extends ResourceController
             return $this->respond(['success' => false, 'data' => $user], 404, 'USER NOT FOUND');
         }
 
+        unset($user['password'], $user['created_at'], $user['updated_at']);
+
         return $this->respond(['success' => true, 'data' => $user], 200, 'OK');
     }
 
@@ -68,16 +73,6 @@ class UserController extends ResourceController
         helper(['form']);
         $data = json_decode($this->request->getVar('data'));
         $image = $this->request->getFiles();
-
-        // if (!$data->validate([
-        //     'email' => 'required|is_unique[Users.email]',
-        //     'name' => 'required',
-        //     'address' => 'required',
-        //     'district' => 'required',
-        //     'province' => 'required',
-        // ])) {
-        //     return $this->respond(['success' => false, 'data' => null, 'error' => \Config\Services::validation()->getErrors()], 400, 'VALIDATION ERROR');
-        // }
 
         if (!$this->validate([
             'image' => 'uploaded[image]|max_size[image,2048]|is_image[image]'

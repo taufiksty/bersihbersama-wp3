@@ -64,13 +64,17 @@ class Events extends Migration
             ],
             'done' => [
                 'type' => 'ENUM',
-                'constraint' => ['1', '2'],
+                'constraint' => ['0', '1'],
                 'null' => false
             ],
             'link_groupwa' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
                 'null' => false
+            ],
+            'images_done' => [
+                'type' => 'LONGTEXT',
+                'null' => true
             ],
             'created_at' => [
                 'type' => 'DATETIME',
@@ -85,7 +89,7 @@ class Events extends Migration
 
     public function down()
     {
-        
+
         $this->forge->dropTable('Events');
     }
 }

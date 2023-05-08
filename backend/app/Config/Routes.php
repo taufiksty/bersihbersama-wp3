@@ -37,24 +37,37 @@ $routes->group('api/v1', ['filter' => 'auth', 'filter' => 'cors'], function ($ro
     $routes->get('users/(:num)', 'UserController::show/$1');
     $routes->post('users/update/(:num)', 'UserController::update/$1');
     $routes->delete('users/(:num)', 'UserController::delete/$1');
-    
+
     $routes->get('auth/user', 'AuthController::authUser');
-    
+
     $routes->get('events/', 'EventsController::index');
     $routes->post('events/', 'EventsController::create');
-    $routes->get('events/(:num)', 'EventsController::show/$1'); 
+    $routes->get('events/(:num)', 'EventsController::show/$1');
     $routes->post('events/update/(:num)', 'EventsController::update/$1');
     $routes->delete('events/(:num)', 'EventsController::delete/$1');
 
-    
     $routes->get('reports/', 'ReportsController::index');
     $routes->post('reports/', 'ReportsController::create');
-    $routes->get('reports/(:num)', 'ReportsController::show/$1'); 
+    $routes->get('reports/(:num)', 'ReportsController::show/$1');
     $routes->post('reports/update/(:num)', 'ReportsController::update/$1');
     $routes->delete('reports/(:num)', 'ReportsController::delete/$1');
 
+    $routes->get('blogs/', 'BlogsController::index');
+    $routes->post('blogs/', 'BlogsController::create');
+    $routes->get('blogs/(:num)', 'BlogsController::show/$1');
+    $routes->post('blogs/update/(:num)', 'BlogsController::update/$1');
+    $routes->delete('blogs/(:num)', 'BlogsController::delete/$1');
 
+    $routes->post('status/acceptReport/(:num)', 'StatusController::acceptReport/$1');
+
+    $routes->get('events/checkUserInAnEvent/(:num)/(:num)', 'PartisipantEventController::checkUserInAnEvent/$1/$2');
+    $routes->post('events/join/(:num)', 'PartisipantEventController::joinEvent/$1');
+    $routes->get('events/getEventsByUserJoined/(:num)', 'PartisipantEventController::getEventsByUserJoined/$1');
+    $routes->get('events/getCountPartisipant/(:num)', 'PartisipantEventController::getCountPartisipantByEvent/$1');
+
+    $routes->post('events/finish/(:num)', 'StatusController::finishEvent/$1');
 });
+
 $routes->post('api/v1/users', 'UserController::create');
 $routes->post('api/v1/auth/token', 'AuthController::login');
 /*

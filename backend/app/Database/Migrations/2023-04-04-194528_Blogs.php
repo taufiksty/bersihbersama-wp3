@@ -20,7 +20,7 @@ class Blogs extends Migration
                 'constraint' => 100,
                 'null' => false
             ],
-            'slug' => [
+            'excerpt' => [
                 'type' => 'VARCHAR',
                 'constraint' => 100,
                 'null' => false
@@ -30,7 +30,7 @@ class Blogs extends Migration
                 'null' => false
             ],
             'user_id' => [
-                'type' => 'INTEGER',
+                'type' => 'INT',
                 'constraint' => 5,
                 'null' => false,
                 'unsigned' => true
@@ -49,7 +49,7 @@ class Blogs extends Migration
                 'type' => 'DATETIME',
                 'null' => false
             ],
-            'update_at' => [
+            'updated_at' => [
                 'type' => 'DATETIME',
                 'null' => false
             ],

@@ -1,18 +1,20 @@
 import React from 'react';
 import axios from 'axios';
-import ModalUpdateUser from './modalUpdateUser';
 import { useNavigate } from 'react-router-dom';
+import ModalAddBlog from './modalAddBlog';
+import ModalUpdateBlog from './modalUpdateBlog';
 
-export default function TableBlogsAdmin(props) {
+export default function TableEventsAdmin(props) {
 	const [data, setData] = React.useState([]);
 	const [search, setSearch] = React.useState('');
-	const [showModalUpdateUser, setShowModalUpdateUser] = React.useState({
+	const [showModalAddBlog, setShowModalAddBlog] = React.useState(false);
+	const [showModalUpdateBlog, setShowModalUpdateBlog] = React.useState({
 		isShow: false,
-		user: {},
+		blog: {},
 	});
-	const [showModalDeleteUser, setShowModalDeleteUser] = React.useState({
+	const [showModalDeleteBlog, setShowModalDeleteBlog] = React.useState({
 		isShow: false,
-		user: {},
+		blog: {},
 	});
 
 	const navigate = useNavigate();
@@ -45,25 +47,29 @@ export default function TableBlogsAdmin(props) {
 		getDataSearch();
 	};
 
-	const ModalDeleteUser = (props) => {
+	const ModalDeleteBlog = (props) => {
 		const handleDelete = (e) => {
 			e.preventDefault();
-			const id = showModalDeleteUser.user.id;
+			const id = showModalDeleteBlog.blog.id;
 			axios
-				.delete(`http://localhost:8080/api/v1/users/${id}`, {
+				.delete(`http://localhost:8080/api/v1/blogs/${id}`, {
 					headers: { Authorization: `Bearer ${props.token}` },
 				})
 				.then((response) => {
 					console.log(response.data);
 					if (response.data.success) {
-						setShowModalDeleteUser({ isShow: false, user: {} });
+						setShowModalDeleteBlog({ isShow: false, blog: {} });
 						navigate('/admin', {
-							state: { isSuccess: true, message: 'Perubahan berhasil.' },
+							state: {
+								menu: 'blogs',
+								isSuccess: true,
+								message: 'Blog berhasil dihapus.',
+							},
 						});
 						window.location.reload();
 					}
 				})
-				.catch((error) => console.log(e));
+				.catch((error) => console.log(error));
 		};
 
 		return (
@@ -77,7 +83,7 @@ export default function TableBlogsAdmin(props) {
 							type="button"
 							className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
 							onClick={() =>
-								setShowModalDeleteUser({ isShow: false, user: {} })
+								setShowModalDeleteBlog({ isShow: false, blog: {} })
 							}>
 							<svg
 								aria-hidden="true"
@@ -117,7 +123,7 @@ export default function TableBlogsAdmin(props) {
 							</button>
 							<button
 								onClick={() =>
-									setShowModalDeleteUser({ isShow: false, user: {} })
+									setShowModalDeleteBlog({ isShow: false, blog: {} })
 								}
 								type="button"
 								className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
@@ -136,22 +142,27 @@ export default function TableBlogsAdmin(props) {
 			let keys = Object.keys(dataColumns || {});
 			return keys.map((name, i) => {
 				return name == 'id' ||
-					name == 'created_at' ||
 					name == 'updated_at' ||
-					name == 'password' ? (
+					name == 'excerpt' ||
+					name == 'content' ||
+					name == 'image' ? (
 					''
 				) : (
 					<th
 						key={i}
 						scope="col"
 						className="px-6 py-3">
-						{name == 'sm_account' ? 'Social Media Account' : name}
+						{name == 'created_at'
+							? 'Created At'
+							: name == 'user_id'
+							? 'User Id'
+							: name}
 					</th>
 				);
 			});
 		};
 
-		const RowUsers = () => {
+		const RowBlogs = () => {
 			return data.map((item, i) => (
 				<tr
 					className="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
@@ -159,38 +170,36 @@ export default function TableBlogsAdmin(props) {
 					<th
 						scope="row"
 						className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-						{item.name}
+						{item.title}
 					</th>
-					<td className="px-6 py-4">{item.email}</td>
-					<td className="px-6 py-4">{item.address}</td>
-					<td className="px-6 py-4">{item.district}</td>
-					<td className="px-6 py-4">{item.city}</td>
-					<td className="px-6 py-4">{item.province}</td>
-					<td className="px-6 py-4">{item.sm_account}</td>
-					<td className="px-6 py-4">
-						{item.role == '1' ? 'Admin' : 'Partisipan'}
-					</td>
-					<td className="px-6 py-4">
-						<img
-							src={`http://localhost:8080/images/profile/${item.image}`}
-							alt="user's profile"
-						/>
-					</td>
-					<td className="px-6 py-4">
+					<td className="px-6 py-4">{item.user_id}</td>
+					<td className="px-6 py-4">{item.category}</td>
+					<td className="px-6 py-4">{item.created_at}</td>
+					<td className="p-4">
 						<button
 							type="button"
-							className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+							className="font-medium text-start text-primary-600 dark:text-primary-500 hover:underline"
 							onClick={() =>
-								setShowModalUpdateUser({ isShow: true, user: item })
+								navigate(`/blogs/${item.id}`, {
+									state: { dataBlog: item, dataBlogs: data },
+								})
+							}>
+							Lihat detail
+						</button>
+						<button
+							type="button"
+							className="font-medium block pt-2 text-blue-600 dark:text-blue-500 hover:underline"
+							onClick={() =>
+								setShowModalUpdateBlog({ isShow: true, blog: item })
 							}>
 							Ubah
 						</button>
 						<button
 							type="button"
+							className="button-delete font-medium block pt-2 text-red-600 dark:text-blue-500 hover:underline"
 							onClick={() =>
-								setShowModalDeleteUser({ isShow: true, user: item })
-							}
-							className="button-delete font-medium block pt-2 text-red-600 dark:text-blue-500 hover:underline">
+								setShowModalDeleteBlog({ isShow: true, blog: item })
+							}>
 							Hapus
 						</button>
 					</td>
@@ -210,7 +219,7 @@ export default function TableBlogsAdmin(props) {
 						</th>
 					</tr>
 				</thead>
-				<tbody className="overflow-y-auto">{<RowUsers />}</tbody>
+				<tbody className="overflow-y-auto">{<RowBlogs />}</tbody>
 			</table>
 		);
 	};
@@ -258,22 +267,36 @@ export default function TableBlogsAdmin(props) {
 							Cari
 						</button>
 					</div>
+					<button
+						type="button"
+						onClick={() => setShowModalAddBlog(true)}
+						className="mt-2 w-full text-primary-600 hover:text-white border border-primary-600 hover:bg-primary-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-primary-500 dark:text-primary-500 dark:hover:text-white dark:hover:bg-primary-500 dark:focus:ring-primary-800">
+						Tambah Blog
+					</button>
 				</form>
-				{showModalUpdateUser.isShow && (
-					<ModalUpdateUser
-						user={showModalUpdateUser.user}
+
+				{showModalAddBlog && (
+					<ModalAddBlog
+						setIsShow={() => setShowModalAddBlog(false)}
+						token={props.token}
+					/>
+				)}
+
+				{showModalUpdateBlog.isShow && (
+					<ModalUpdateBlog
+						blog={showModalUpdateBlog.blog}
 						setIsShow={() =>
-							setShowModalUpdateUser({ isShow: false, user: {} })
+							setShowModalUpdateBlog({ isShow: false, blog: {} })
 						}
 						token={props.token}
 					/>
 				)}
 
-				{showModalDeleteUser.isShow && (
-					<ModalDeleteUser
-						user={showModalDeleteUser.user}
+				{showModalDeleteBlog.isShow && (
+					<ModalDeleteBlog
+						blog={showModalDeleteBlog.blog}
 						setIsShow={() =>
-							setShowModalDeleteUser({ isShow: false, user: {} })
+							setShowModalDeleteBlog({ isShow: false, blog: {} })
 						}
 						token={props.token}
 						message="Anda yakin ingin menghapusnya?"

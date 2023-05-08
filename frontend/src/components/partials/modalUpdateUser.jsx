@@ -81,7 +81,6 @@ export default function ModalUpdateUser(props) {
 		formData.append('image', imageFile);
 		formData.append('data', JSON.stringify(valueSubmit));
 
-		console.log(formData.get('image'));
 		axios
 			.post(
 				`http://localhost:8080/api/v1/users/update/${valueSubmit.id}`,

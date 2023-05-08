@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class Events extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'events';
+    protected $table            = 'Events';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;
@@ -39,4 +39,16 @@ class Events extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function search($keyword)
+    {
+        return $this->like('title', $keyword)
+            ->orLike('date', $keyword)
+            ->orLike('total_people', $keyword)
+            ->orLike('address', $keyword)
+            ->orLike('district', $keyword)
+            ->orLike('city', $keyword)
+            ->orLike('province', $keyword)
+            ->orLike('done', $keyword);
+    }
 }

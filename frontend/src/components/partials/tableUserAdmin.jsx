@@ -199,7 +199,7 @@ export default function TableAdmin(props) {
 		};
 
 		return (
-			<table className="w-full mt-2 text-xs text-left rounded shadow-md text-gray-500 dark:text-gray-400">
+			<table className="max-w-full mt-4 text-xs md:overflow-x-scroll text-left rounded shadow-md text-gray-500 dark:text-gray-400">
 				<thead className="text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
 					<tr>
 						<Columns />
@@ -217,7 +217,7 @@ export default function TableAdmin(props) {
 
 	return (
 		<div className="p-4 pt-20 sm:ml-64">
-			<div className="relative overflow-x-auto md:overflow-x-scroll sm:rounded-lg">
+			<div className="relative overflow-x-auto sm:rounded-lg">
 				<form action="#">
 					<label
 						htmlFor="default-search"

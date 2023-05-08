@@ -13,7 +13,7 @@ class EventsSeeder extends Seeder
         for ($i = 0; $i < 5; $i++) {
             $faker = \Faker\Factory::create('id_ID');
             $data = [
-                'title' => $faker->title,
+                'title' => 'Lorem ipsum dolor sit amet',
                 'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis vel illo veritatis tempore dolorum ipsa?',
                 'date' => '2023-08-22',
                 'total_people' => '40',
