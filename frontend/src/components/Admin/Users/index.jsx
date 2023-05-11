@@ -15,7 +15,6 @@ export default function TableUsers(props) {
 		user: {},
 	});
 
-
 	// useEffect Get Data User
 	React.useEffect(() => {
 		const getData = async () => {
@@ -53,14 +52,15 @@ export default function TableUsers(props) {
 				return name == 'id' ||
 					name == 'created_at' ||
 					name == 'updated_at' ||
-					name == 'password' ? (
+					name == 'password' ||
+					name == 'sm_account' ? (
 					''
 				) : (
 					<th
 						key={i}
 						scope="col"
 						className="px-6 py-3">
-						{name == 'sm_account' ? 'Social Media Account' : name}
+						{name}
 					</th>
 				);
 			});
@@ -81,7 +81,6 @@ export default function TableUsers(props) {
 					<td className="px-6 py-4">{item.district}</td>
 					<td className="px-6 py-4">{item.city}</td>
 					<td className="px-6 py-4">{item.province}</td>
-					<td className="px-6 py-4">{item.sm_account}</td>
 					<td className="px-6 py-4">
 						{item.role == '1' ? 'Admin' : 'Partisipan'}
 					</td>
