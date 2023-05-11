@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\Reports;
 use App\Models\Events;
+use DateTime;
 
 class StatusController extends BaseController
 {
@@ -28,6 +29,7 @@ class StatusController extends BaseController
         if (!$report) return $this->response->setJSON(['success' => false, 'message' => 'Update failed. Id not found']);
 
         $data_update = [
+            'id' => $report['id'],
             'title' => $report['title'],
             'description' => $report['description'],
             'address' => $report['address'],
@@ -47,8 +49,6 @@ class StatusController extends BaseController
 
     public function finishEvent($id = null)
     {
-        // $db_event = new Events;
-        // $event = $db_event->where('id', $id)->first();
         $query_check = "SELECT * FROM Events WHERE id = {$id}";
         $event = $this->db->query($query_check)->getResult();
 
@@ -60,20 +60,18 @@ class StatusController extends BaseController
 
         $imagesName = [];
 
+        $dateTime = new DateTime();
+        $currentDateTime = $dateTime->format('Y-m-d;H:i:s');
+
         for ($i = 0; $i < count($images['name']); $i++) {
-            $imagesName[] = $images['name'][$i];
-            move_uploaded_file($images['tmp_name'][$i], 'images/events_done/' . $images['name'][$i]);
+            $imageNameBeforeFormatted = $images['name'][$i];
+            $imagesName[] = "$currentDateTime-$imageNameBeforeFormatted";
+            move_uploaded_file($images['tmp_name'][$i], 'images/events_done/' . $imagesName[$i]);
         }
 
         $imagesName_encode = json_encode($imagesName);
         $query_update = "UPDATE Events SET done = '1', images_done = '{$imagesName_encode}' WHERE id = {$id}";
         $this->db->query($query_update);
-        // $data = [
-        //     'done' => 1,
-        //     'images_done' => json_encode($imagesName)
-        // ];
-
-        // $db_event->update($id, $data);
 
         return $this->response->setJSON(['status' => 'success', 'message' => 'Foto berhasil ditambahkan. Kegiatan selesai dikonfirmasi'])->setStatusCode(201);
     }

@@ -10,22 +10,18 @@ class PartisipantEvent extends Migration
     {
         $this->forge->addField([
             'id' => [
-                'type' => 'INT',
-                'constraint' => 5,
-                'unsigned' => true,
-                'auto_increment' => true
+                'type' => 'CHAR',
+                'constraint' => 50,
             ],
             'event_id' => [
-                'type' => 'INT',
-                'constraint' => 5,
-                'null' => false,
-                'unsigned' => true,
+                'type' => 'CHAR',
+                'constraint' => 50,
+                'null' => false
             ],
             'user_id' => [
-                'type' => 'INT',
-                'constraint' => 5,
-                'null' => false,
-                'unsigned' => true
+                'type' => 'CHAR',
+                'constraint' => 50,
+                'null' => false
             ],
         ]);
         $this->forge->addPrimaryKey('id');

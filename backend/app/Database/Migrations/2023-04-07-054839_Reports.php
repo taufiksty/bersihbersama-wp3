@@ -10,10 +10,8 @@ class Reports extends Migration
     {
         $this->forge->addField([
             'id' => [
-                'type' => 'INT',
-                'constraint' => 5,
-                'unsigned' => true,
-                'auto_increment' => true
+                'type' => 'CHAR',
+                'constraint' => 50,
             ],
             'title' => [
                 'type' => 'VARCHAR',
@@ -50,10 +48,8 @@ class Reports extends Migration
                 'default' => null
             ],
             'user_id' => [
-                'type' => 'INT',
-                'constraint' => 5,
-                'null' => false,
-                'unsigned' => true
+                'type' => 'CHAR',
+                'constraint' => 50,
             ],
             'link_map' => [
                 'type' => 'TEXT',

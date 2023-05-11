@@ -33,7 +33,7 @@ class AuthController extends BaseController
                 ];
                 $token = JWT::encode($payload, $key, 'HS256');
 
-                return $this->response->setJSON(['success' => true, 'token' => $token]);
+                return $this->response->setJSON(['success' => true, 'token' => $token, 'expirationTime' => time() + 10800]);
             } else {
                 return $this->response->setJSON(['success' => false, 'message' => 'USER NOT FOUND']);
             }

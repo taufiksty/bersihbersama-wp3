@@ -5,7 +5,7 @@ namespace App\Controllers;
 use CodeIgniter\RESTful\ResourceController;
 use App\Models\Events;
 use CodeIgniter\API\ResponseTrait;
-
+use DateTime;
 
 class EventsController extends ResourceController
 {
@@ -44,14 +44,19 @@ class EventsController extends ResourceController
         $data = json_decode($this->request->getVar('data'));
         $images = $_FILES['image'];
 
+        $dateTime = new DateTime();
+        $currentDateTime = $dateTime->format('Y-m-d;H:i:s');
+
         $imagesName = [];
 
         for ($i = 0; $i < count($images['name']); $i++) {
-            $imagesName[] = $images['name'][$i];
-            move_uploaded_file($images['tmp_name'][$i], 'images/events/' . $images['name'][$i]);
+            $imageNameBeforeFormatted = $images['name'][$i];
+            $imagesName[] = "$currentDateTime-$imageNameBeforeFormatted";
+            move_uploaded_file($images['tmp_name'][$i], 'images/events/' . $imagesName[$i]);
         }
 
         $data_insert = [
+            'id' => uniqid('event-'),
             'title' => $data->title,
             'description' => $data->description,
             'date' => $data->date,
@@ -66,7 +71,7 @@ class EventsController extends ResourceController
         ];
 
         $db_event = new Events;
-        $save = $db_event->insert($data_insert);
+        $db_event->insert($data_insert);
 
         return $this->respondCreated(['success' => true], 'OK');
     }
@@ -77,7 +82,7 @@ class EventsController extends ResourceController
         $event = $db_event->where('id', $id)->first();
 
         if (!$event) {
-            return $this->respond(['success' => false, 'data' => $event], 404, 'USER NOT FOUND');
+            return $this->respond(['success' => false, 'data' => $event], 404, 'EVENT NOT FOUND');
         }
 
         return $this->respond(['success' => true, 'data' => $event], 200, 'OK');
@@ -99,34 +104,33 @@ class EventsController extends ResourceController
         $event = $db_event->where('id', $id)->first();
 
         if (!$event) {
-            return $this->respond(['success' => false, 'data' => null], 404, 'USER NOT FOUND');
+            return $this->respond(['success' => false, 'data' => null], 404, 'EVENT NOT FOUND');
         }
 
         $imageArray = json_decode($event['images']);
-        if ($images) {
-            if (!$event['images']) {
 
-                $imagesName = [];
-                for ($i = 0; $i < count($images['name']); $i++) {
-                    $imagesName[] = $images['name'][$i];
-                    move_uploaded_file($images['tmp_name'][$i], 'images/events/' . $images['name'][$i]);
-                }
-            } else {
+        if ($images) {
+            if ($event['images']) {
                 for ($i = 0; $i < count($imageArray); $i++) {
                     unlink('images/events/' . $imageArray[$i]);
                 }
+            }
 
-                $imagesName = [];
-                for ($i = 0; $i < count($images['name']); $i++) {
-                    $imagesName[] = $images['name'][$i];
-                    move_uploaded_file($images['tmp_name'][$i], 'images/events/' . $images['name'][$i]);
-                }
+            $dateTime = new DateTime();
+            $currentDateTime = $dateTime->format('Y-m-d;H:i:s');
+
+            $imagesName = [];
+            for ($i = 0; $i < count($images['name']); $i++) {
+                $imageNameBeforeFormatted = $images['name'][$i];
+                $imagesName[] = "$currentDateTime-$imageNameBeforeFormatted";
+                move_uploaded_file($images['tmp_name'][$i], 'images/events/' . $imagesName[$i]);
             }
         } else {
             $imagesName = [];
         }
 
         $data_update = [
+            'id' => $event['id'],
             'title' => $data->title,
             'description' => $data->description,
             'date' => $data->date,
@@ -150,7 +154,7 @@ class EventsController extends ResourceController
         $event = $db_event->where('id', $id)->first();
 
         if (!$event) {
-            return $this->respond(['success' => false, 'data' => null], 404, 'event NOT FOUND');
+            return $this->respond(['success' => false, 'data' => null], 404, 'EVENT NOT FOUND');
         }
 
         $imageArray = json_decode($event['images']);

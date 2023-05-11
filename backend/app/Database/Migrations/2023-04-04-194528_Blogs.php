@@ -10,10 +10,8 @@ class Blogs extends Migration
     {
         $this->forge->addField([
             'id' => [
-                'type' => 'INT',
-                'constraint' => 5,
-                'unsigned' => true,
-                'auto_increment' => true
+                'type' => 'CHAR',
+                'constraint' => 50,
             ],
             'title' => [
                 'type' => 'VARCHAR',
@@ -30,10 +28,8 @@ class Blogs extends Migration
                 'null' => false
             ],
             'user_id' => [
-                'type' => 'INT',
-                'constraint' => 5,
-                'null' => false,
-                'unsigned' => true
+                'type' => 'CHAR',
+                'constraint' => 50,
             ],
             'category' => [
                 'type' => 'VARCHAR',

@@ -14,7 +14,7 @@ class Events extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['title', 'description', 'date', 'total_people', 'address', 'district', 'city', 'province', 'link_map', 'images', 'done'];
+    protected $allowedFields    = ['id', 'title', 'description', 'date', 'total_people', 'address', 'district', 'city', 'province', 'link_map', 'images', 'done'];
 
     // Dates
     protected $useTimestamps = true;

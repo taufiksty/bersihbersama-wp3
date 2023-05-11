@@ -5,6 +5,7 @@ namespace App\Controllers;
 use CodeIgniter\RESTful\ResourceController;
 use App\Models\Users;
 use CodeIgniter\API\ResponseTrait;
+use DateTime;
 
 class UserController extends ResourceController
 {
@@ -43,13 +44,14 @@ class UserController extends ResourceController
         }
 
         $data_insert = [
+            'id' => uniqid('user-'),
             'email' => $this->request->getVar('email'),
             'name' => $this->request->getVar('name'),
             'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
         ];
 
         $db_user = new Users;
-        $save = $db_user->insert($data_insert);
+        $db_user->insert($data_insert);
 
         return $this->setResponseFormat('json')->respondCreated(['success' => true], 'OK');
     }
@@ -72,7 +74,7 @@ class UserController extends ResourceController
     {
         helper(['form']);
         $data = json_decode($this->request->getVar('data'));
-        $image = $this->request->getFiles();
+        $image = $_FILES['image'];
 
         if (!$this->validate([
             'image' => 'uploaded[image]|max_size[image,2048]|is_image[image]'
@@ -87,16 +89,21 @@ class UserController extends ResourceController
             return $this->respond(['success' => false, 'data' => null], 404, 'USER NOT FOUND');
         }
 
-        $newName = $this->request->getFile('image')->getRandomName();
+        $dateTime = new DateTime();
+        $currentDateTime = $dateTime->format('Y-m-d;H:i:s');
+
+        $imageName = $image['name'];
+        $newImageName = "$currentDateTime-$imageName";
+
         if ($image) {
             if ($user['image'] == 'default.png') {
-                move_uploaded_file($image['tmp_name'], 'images/profile/' . $newName);
+                move_uploaded_file($image['tmp_name'], 'images/profile/' . $newImageName);
             } else {
                 unlink('images/profile/' . $user['image']);
-                move_uploaded_file($image['tmp_name'], 'images/profile/' . $newName);
+                move_uploaded_file($image['tmp_name'], 'images/profile/' . $newImageName);
             }
         } else {
-            $newName = $user['image'];
+            $newImageName = $user['image'];
         }
 
         $data_update = [
@@ -109,7 +116,7 @@ class UserController extends ResourceController
             'province' => $data->province,
             'sm_account' => $data->sm_account,
             'role' => $data->role,
-            'image' => $newName,
+            'image' => $newImageName,
         ];
 
         $db_user->update($id, $data_update);

@@ -13,6 +13,7 @@ class UsersSeeder extends Seeder
         for ($i = 0; $i < 5; $i++) {
             $faker = \Faker\Factory::create('id_ID');
             $data = [
+                'id' => uniqid('user-'),
                 'name' => $faker->name,
                 'email' => $faker->email,
                 'password' => password_hash('password', PASSWORD_DEFAULT),

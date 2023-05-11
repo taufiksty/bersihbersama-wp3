@@ -1,21 +1,38 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import Homepage from './components/homepage';
-import Login from './components/login';
-import Register from './components/register';
-import DashboardAdmin from './components/admin';
-import EventUser from './components/eventUser';
-import BlogUser from './components/blogUser';
-import Profile from './components/profile';
-import EventDetails from './components/partials/eventDetails';
-import BlogDetails from './components/partials/blogDetails';
+import Homepage from './pages/Homepage';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Admin from './pages/Admin';
+import EventUser from './components/Users/Events';
+import BlogUser from './components/Users/Blogs';
+import Profile from './components/Users/Profile';
+import EventDetails from './components/Partials/eventDetails';
+import BlogDetails from './components/Partials/blogDetails';
+import NotFound from './pages/NotFound';
+import ServerError from './pages/ServerError';
 
 function App() {
 	const isAuthenticated = localStorage.getItem('credentials') ? true : false;
 	const role = isAuthenticated
 		? JSON.parse(localStorage.getItem('credentials'))?.user.role
 		: 0;
+
+	// Expiration Credentials
+	React.useEffect(() => {
+		const storedCredentials = localStorage.getItem('credentials');
+
+		if (storedCredentials) {
+			const { expirationTime } = JSON.parse(storedCredentials);
+			const currentTime = Math.floor(Date.now() / 1000);
+
+			if (currentTime > expirationTime) {
+				localStorage.removeItem('credentials');
+				window.location.href = '/';
+			}
+		}
+	}, []);
 
 	return (
 		<Router>
@@ -34,9 +51,7 @@ function App() {
 				/>
 				<Route
 					path="/admin"
-					element={
-						isAuthenticated && role == 1 ? <DashboardAdmin /> : <Login />
-					}
+					element={isAuthenticated && role == 1 ? <Admin /> : <Login />}
 				/>
 				<Route
 					path="/profil"
@@ -57,6 +72,14 @@ function App() {
 				<Route
 					path="/blogs/:id"
 					element={<BlogDetails />}
+				/>
+				<Route
+					path="/serverError"
+					element={<ServerError />}
+				/>
+				<Route
+					path="*"
+					element={<NotFound />}
 				/>
 			</Routes>
 		</Router>

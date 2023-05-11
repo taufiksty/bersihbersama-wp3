@@ -14,7 +14,7 @@ class Reports extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['title', 'description', 'address', 'district', 'city', 'province', 'user_id', 'link_map', 'images', 'status'];
+    protected $allowedFields    = ['id', 'title', 'description', 'address', 'district', 'city', 'province', 'user_id', 'link_map', 'images', 'status'];
 
     // Dates
     protected $useTimestamps = true;

@@ -53,8 +53,8 @@ class PartisipantEventController extends BaseController
         ];
 
         $rules = [
-            'eventId' => 'required|numeric',
-            'userId' => 'required|numeric'
+            'eventId' => 'required',
+            'userId' => 'required'
         ];
 
         if (!$this->validation->setRules($rules)->run($data)) {
@@ -74,7 +74,8 @@ class PartisipantEventController extends BaseController
             ])->setStatusCode(400);
         }
 
-        $query = "INSERT INTO Partisipant_Event (event_id, user_id) VALUES ({$data['eventId']}, {$data['userId']})";
+        $id = uniqid('part_event-');
+        $query = "INSERT INTO Partisipant_Event (id, event_id, user_id) VALUES ({$id}, {$data['eventId']}, {$data['userId']})";
         $this->db->query($query);
 
         return $this->response->setJSON([

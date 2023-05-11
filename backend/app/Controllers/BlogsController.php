@@ -5,6 +5,7 @@ namespace App\Controllers;
 use CodeIgniter\RESTful\ResourceController;
 use App\Models\Blogs;
 use CodeIgniter\API\ResponseTrait;
+use DateTime;
 
 class BlogsController extends ResourceController
 {
@@ -39,15 +40,19 @@ class BlogsController extends ResourceController
       return $this->respond(['success' => false, 'image' => null, 'error' => \Config\Services::validation()->getErrors()], 400, 'VALIDATION ERROR');
     }
 
-    if ($image) move_uploaded_file($image['tmp_name'], 'images/blogs/' . $image['name']);
+    $dateTime = new DateTime();
+    $currentDateTime = $dateTime->format('Y-m-d;H:i:s');
+
+    if ($image) move_uploaded_file($image['tmp_name'], 'images/blogs/' . $currentDateTime . '-' . $image['name']);
 
     $data_insert = [
+      'id' => uniqid('blog-'),
       'title' => $data->title,
       'excerpt' => $data->excerpt,
       'content' => $data->content,
       'user_id' => $data->user_id,
       'category' => $data->category,
-      'image' => $image ? $image['name'] : ''
+      'image' => $image ? $currentDateTime . '-' . $image['name'] : ''
     ];
 
     $db_blog = new Blogs;
@@ -62,7 +67,7 @@ class BlogsController extends ResourceController
     $blog = $db_blog->where('id', $id)->first();
 
     if (!$blog) {
-      return $this->respond(['success' => false, 'data' => $blog], 404, 'USER NOT FOUND');
+      return $this->respond(['success' => false, 'data' => $blog], 404, 'BLOG NOT FOUND');
     }
 
     return $this->respond(['success' => true, 'data' => $blog], 200, 'OK');
@@ -84,25 +89,29 @@ class BlogsController extends ResourceController
     $blog = $db_blog->where('id', $id)->first();
 
     if (!$blog) {
-      return $this->respond(['success' => false, 'data' => null], 404, 'USER NOT FOUND');
+      return $this->respond(['success' => false, 'data' => null], 404, 'BLOG NOT FOUND');
     }
 
     if ($image) {
+      $dateTime = new DateTime();
+      $currentDateTime = $dateTime->format('Y-m-d;H:i:s');
+
       if ($blog['image']) {
-        if (file_exists('images/blogs/' . $blog['image'])) unlink('images/blogs/' . $blog['image']);
-        move_uploaded_file($image['tmp_name'], 'images/blogs/' . $image['name']);
+        if ($blog['image'] != 'default.png') unlink('images/blogs/' . $blog['image']);
+        move_uploaded_file($image['tmp_name'], 'images/blogs/' . $currentDateTime . '-' . $image['name']);
       } else {
-        move_uploaded_file($image['tmp_name'], 'images/blogs/' . $image['name']);
+        move_uploaded_file($image['tmp_name'], 'images/blogs/' . $currentDateTime . '-' . $image['name']);
       }
     }
 
     $data_update = [
+      'id' => $blog['id'],
       'title' => $data->title,
       'excerpt' => $data->excerpt,
       'content' => $data->content,
       'user_id' => $data->user_id,
       'category' => $data->category,
-      'image' => $image ? $image['name'] : $blog['image'],
+      'image' => $image ? $currentDateTime . '-' . $image['name'] : $blog['image'],
     ];
 
     $db_blog->update($id, $data_update);
@@ -116,7 +125,7 @@ class BlogsController extends ResourceController
     $blog = $db_blog->where('id', $id)->first();
 
     if (!$blog) {
-      return $this->respond(['success' => false, 'data' => null], 404, 'USER NOT FOUND');
+      return $this->respond(['success' => false, 'data' => null], 404, 'BLOG NOT FOUND');
     }
 
     if ($blog['image'] && file_exists('images/blogs/' . $blog['image'])) unlink('images/blogs/' . $blog['image']);

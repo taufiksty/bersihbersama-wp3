@@ -5,7 +5,7 @@ namespace App\Controllers;
 use CodeIgniter\RESTful\ResourceController;
 use App\Models\Reports;
 use CodeIgniter\API\ResponseTrait;
-
+use DateTime;
 
 class ReportsController extends ResourceController
 {
@@ -53,12 +53,17 @@ class ReportsController extends ResourceController
 
         $imagesName = [];
 
+        $dateTime = new DateTime();
+        $currentDateTime = $dateTime->format('Y-m-d;H:i:s');
+
         for ($i = 0; $i < count($images['name']); $i++) {
-            $imagesName[] = $images['name'][$i];
-            move_uploaded_file($images['tmp_name'][$i], 'images/reports/' . $images['name'][$i]);
+            $imageNameBeforeFormatted = $images['name'][$i];
+            $imagesName[] = "$currentDateTime-$imageNameBeforeFormatted";
+            move_uploaded_file($images['tmp_name'][$i], 'images/reports/' . $imagesName[$i]);
         }
 
         $data_insert = [
+            'id' => uniqid('report-'),
             'title' => $data->title,
             'description' => $data->description,
             'address' => $data->address,
@@ -67,11 +72,12 @@ class ReportsController extends ResourceController
             'province' => $data->province,
             'user_id' => $data->user_id,
             'link_map' => $data->link_map,
+            'status' => 0,
             'images' => json_encode($imagesName)
         ];
 
         $db_reports = new reports;
-        $save = $db_reports->insert($data_insert);
+        $db_reports->insert($data_insert);
 
         return $this->respondCreated(['success' => true], 'OK');
     }
@@ -104,35 +110,33 @@ class ReportsController extends ResourceController
         $report = $db_reports->where('id', $id)->first();
 
         if (!$report) {
-            return $this->respond(['success' => false, 'data' => null], 404, 'USER NOT FOUND');
+            return $this->respond(['success' => false, 'data' => null], 404, 'REPORT NOT FOUND');
         }
 
         $imageArray = json_decode($report['images']);
 
         if ($images) {
-            if (!$report['images']) {
-
-                $imagesName = [];
-                for ($i = 0; $i < count($images['name']); $i++) {
-                    $imagesName[] = $images['name'][$i];
-                    move_uploaded_file($images['tmp_name'][$i], 'images/reports/' . $images['name'][$i]);
-                }
-            } else {
+            if ($report['images']) {
                 for ($i = 0; $i < count($imageArray); $i++) {
                     unlink('images/reports/' . $imageArray[$i]);
                 }
+            }
 
-                $imagesName = [];
-                for ($i = 0; $i < count($images['name']); $i++) {
-                    $imagesName[] = $images['name'][$i];
-                    move_uploaded_file($images['tmp_name'][$i], 'images/reports/' . $images['name'][$i]);
-                }
+            $dateTime = new DateTime();
+            $currentDateTime = $dateTime->format('Y-m-d;H:i:s');
+
+            $imagesName = [];
+            for ($i = 0; $i < count($images['name']); $i++) {
+                $imageNameBeforeFormatted = $images['name'][$i];
+                $imagesName[] = "$currentDateTime-$imageNameBeforeFormatted";
+                move_uploaded_file($images['tmp_name'][$i], 'images/reports/' . $imagesName[$i]);
             }
         } else {
             $imagesName = [];
         }
 
         $data_update = [
+            'id' => $report['id'],
             'title' => $data->title,
             'description' => $data->description,
             'address' => $data->address,
@@ -156,7 +160,7 @@ class ReportsController extends ResourceController
         $report = $db_report->where('id', $id)->first();
 
         if (!$report) {
-            return $this->respond(['success' => false, 'data' => null], 404, 'report NOT FOUND');
+            return $this->respond(['success' => false, 'data' => null], 404, 'REPORT NOT FOUND');
         }
 
         $imageArray = json_decode($report['images']);
