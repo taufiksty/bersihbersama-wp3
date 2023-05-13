@@ -7,6 +7,8 @@ use App\Models\Reports;
 use App\Models\Events;
 use DateTime;
 
+use function PHPSTORM_META\map;
+
 class StatusController extends BaseController
 {
     protected $db;
@@ -49,7 +51,7 @@ class StatusController extends BaseController
 
     public function finishEvent($id = null)
     {
-        $query_check = "SELECT * FROM Events WHERE id = {$id}";
+        $query_check = "SELECT * FROM Events WHERE id = '{$id}'";
         $event = $this->db->query($query_check)->getResult();
 
         if (!count($event)) {
@@ -70,9 +72,23 @@ class StatusController extends BaseController
         }
 
         $imagesName_encode = json_encode($imagesName);
-        $query_update = "UPDATE Events SET done = '1', images_done = '{$imagesName_encode}' WHERE id = {$id}";
+        $query_update = "UPDATE Events SET done = '1', images_done = '{$imagesName_encode}' WHERE id = '{$id}'";
         $this->db->query($query_update);
 
         return $this->response->setJSON(['status' => 'success', 'message' => 'Foto berhasil ditambahkan. Kegiatan selesai dikonfirmasi'])->setStatusCode(201);
+    }
+
+    public function getEventDoneByDate()
+    {
+        $year = $this->request->getVar('year');
+
+        $query = "SELECT * FROM Events WHERE done = '1' AND date LIKE '{$year}%'";
+        $result = $this->db->query($query)->getResult();
+
+        $resultFiltered = array_filter($result, function ($i) {
+            return substr($i->date, 5, 2) == $this->request->getVar('month');
+        });
+
+        return $this->response->setJSON(['status' => 'success', 'data' => $resultFiltered]);
     }
 }

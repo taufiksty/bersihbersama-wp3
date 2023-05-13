@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toTitleCase } from '../../../../utils';
 
 export default function ModalAddReport(props) {
 	const [provinces, setProvinces] = React.useState([]);
@@ -40,12 +41,6 @@ export default function ModalAddReport(props) {
 			.then((response) => setDistricts(response.data))
 			.catch((error) => {});
 	}, [regionId.city]);
-
-	function toTitleCase(str) {
-		return str.replace(/\w\S*/g, function (txt) {
-			return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-		});
-	}
 
 	function handleSelectedProvince(event) {
 		const selectedIndex = event.target.options.selectedIndex;
@@ -102,7 +97,7 @@ export default function ModalAddReport(props) {
 						state: {
 							isSuccess: true,
 							message: 'Aduan berhasil dikirim. Lihat riwayat aduanmu',
-							variant: 'addReport'
+							variant: 'addReport',
 						},
 					});
 					window.location.reload();

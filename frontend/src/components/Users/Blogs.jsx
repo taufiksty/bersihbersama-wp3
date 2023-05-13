@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-import Navbar from '../Partials/navbarUser';
-import ModalConfirm from '../Partials/modalConfirm';
+import Navbar from './Navbar';
+import ModalConfirm from '../Partials/modals/modalConfirm';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../Partials/Footer';
 

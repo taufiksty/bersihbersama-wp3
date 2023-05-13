@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 export default function ModalFinishEvent({ setIsShow, eventId, token }) {
 	const [imageFiles, setImageFiles] = React.useState(null);
 
+	const navigate = useNavigate();
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
@@ -22,8 +24,13 @@ export default function ModalFinishEvent({ setIsShow, eventId, token }) {
 			})
 			.then((response) => {
 				if (response.status == 201) {
-          setIsShow;
-          useNavigate()('/admin')
+					setIsShow;
+					navigate('/admin', {
+						state: {
+							isSuccess: true,
+							message: 'Konfirmasi kegiatan selesai berhasil.',
+						},
+					});
 					window.location.reload();
 				}
 			});

@@ -1,18 +1,16 @@
 import React from 'react';
-import Navbar from './navbarUser';
-import AlertSuccess from './alerts/AlertSuccessTop';
-import ModalConfirm from './modalConfirm';
+import Navbar from '../components/Users/Navbar';
+import AlertSuccess from '../components/Partials/alerts/AlertSuccessTop';
+import ModalConfirm from '../components/Partials/modals/modalConfirm';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Footer from './Footer';
+import Footer from '../components/Partials/Footer';
 import axios from 'axios';
-import ModalFinishEvent from './modalFinishEvent';
+import ModalFinishEvent from '../components/Partials/modals/events/modalFinishEvent';
 
 export default function EventDetails() {
-	const [credentials, setCredentials] = React.useState(
-		localStorage.getItem('credentials')
-			? JSON.parse(localStorage.getItem('credentials'))
-			: ''
-	);
+	const credentials = localStorage.getItem('credentials')
+		? JSON.parse(localStorage.getItem('credentials'))
+		: '';
 
 	const [isShow, setIsShow] = React.useState(false);
 	const [isShowFinishEvent, setIsShowFinishEvent] = React.useState(false);
@@ -39,7 +37,7 @@ export default function EventDetails() {
 		};
 
 		getCheckUserOnEvent();
-	}, [data]);
+	}, []);
 
 	const handleJoinEvent = (e) => {
 		e.preventDefault();

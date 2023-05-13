@@ -8,10 +8,11 @@ import Admin from './pages/Admin';
 import EventUser from './components/Users/Events';
 import BlogUser from './components/Users/Blogs';
 import Profile from './components/Users/Profile';
-import EventDetails from './components/Partials/eventDetails';
-import BlogDetails from './components/Partials/blogDetails';
+import EventDetails from './pages/EventDetails';
+import BlogDetails from './pages/BlogDetails';
 import NotFound from './pages/NotFound';
 import ServerError from './pages/ServerError';
+import Print from './pages/Print';
 
 function App() {
 	const isAuthenticated = localStorage.getItem('credentials') ? true : false;
@@ -76,6 +77,10 @@ function App() {
 				<Route
 					path="/serverError"
 					element={<ServerError />}
+				/>
+				<Route
+					path="/printEventReport"
+					element={<Print />}
 				/>
 				<Route
 					path="*"

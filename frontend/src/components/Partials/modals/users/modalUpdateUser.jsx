@@ -9,6 +9,7 @@ export default function ModalUpdateUser(props) {
 	const [regionId, setRegionId] = React.useState({});
 	const [imageFile, setImageFile] = React.useState(null);
 	const [valueSubmit, setValueSubmit] = React.useState(props.user);
+	const credentials = JSON.parse(localStorage.getItem('credentials'));
 
 	const navigate = useNavigate();
 
@@ -93,16 +94,38 @@ export default function ModalUpdateUser(props) {
 				}
 			)
 			.then((response) => {
-				console.log(response.data);
 				if (response.data.success) {
+					axios
+						.get(`http://localhost:8080/api/v1/users/${credentials.user.id}`, {
+							headers: { Authorization: `Bearer ${props.token}` },
+						})
+						.then((response) =>
+							localStorage.setItem(
+								'credentials',
+								JSON.stringify({
+									token: credentials.token,
+									user: response.data.data,
+								})
+							)
+						);
 					props.setIsShow();
-					navigate('/admin', {
-						state: {
-							menu: 'users',
-							isSuccess: true,
-							message: 'Perubahan berhasil.',
-						},
-					});
+					if (credentials.user.role == 1) {
+						navigate('/admin', {
+							state: {
+								menu: 'users',
+								isSuccess: true,
+								message: 'Perubahan berhasil.',
+							},
+						});
+					} else {
+						navigate('/profil', {
+							state: {
+								isSuccess: true,
+								message: 'Data berhasil diubah.',
+							},
+						});
+						window.location.reload();
+					}
 				}
 			})
 			.catch((e) => console.log(e));
@@ -167,6 +190,7 @@ export default function ModalUpdateUser(props) {
 									Email
 								</label>
 								<input
+									disabled={props.user.role == 2 ? true : false}
 									type="email"
 									name="email"
 									id="email"
@@ -288,55 +312,57 @@ export default function ModalUpdateUser(props) {
 									required
 								/>
 							</div>
-							<div>
-								<label
-									htmlFor="role"
-									className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-									Role
-								</label>
-								<div className="flex flex-row justify-around">
-									<div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700 pr-5">
-										<input
-											id="1"
-											type="radio"
-											name="role"
-											value="1"
-											className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 focus:ring-primary-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-											onChange={(e) =>
-												setValueSubmit((oldState) => ({
-													...oldState,
-													role: e.target.value,
-												}))
-											}
-										/>
-										<label
-											htmlFor="bordered-radio-1"
-											className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-											Admin
-										</label>
-									</div>
-									<div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700 pr-5">
-										<input
-											id="2"
-											type="radio"
-											name="role"
-											value="2"
-											className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 focus:ring-primary-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-											onChange={(e) =>
-												setValueSubmit((oldState) => ({
-													...oldState,
-													role: e.target.value,
-												}))
-											}
-										/>
-										<label
-											htmlFor="bordered-radio-2"
-											className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-											Partisipan
-										</label>
+							{props.user.role == 1 && (
+								<div>
+									<label
+										htmlFor="role"
+										className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+										Role
+									</label>
+									<div className="flex flex-row justify-around">
+										<div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700 pr-5">
+											<input
+												id="1"
+												type="radio"
+												name="role"
+												value="1"
+												className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 focus:ring-primary-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+												onChange={(e) =>
+													setValueSubmit((oldState) => ({
+														...oldState,
+														role: e.target.value,
+													}))
+												}
+											/>
+											<label
+												htmlFor="bordered-radio-1"
+												className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+												Admin
+											</label>
+										</div>
+										<div className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700 pr-5">
+											<input
+												id="2"
+												type="radio"
+												name="role"
+												value="2"
+												className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 focus:ring-primary-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+												onChange={(e) =>
+													setValueSubmit((oldState) => ({
+														...oldState,
+														role: e.target.value,
+													}))
+												}
+											/>
+											<label
+												htmlFor="bordered-radio-2"
+												className="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+												Partisipan
+											</label>
+										</div>
 									</div>
 								</div>
-							</div>
+							)}
 							<div>
 								<label
 									className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"

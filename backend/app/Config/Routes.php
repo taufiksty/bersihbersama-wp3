@@ -34,37 +34,38 @@ $routes->setAutoRoute(false);
 $routes->group('api/v1', function ($routes) {
     $routes->get('users/', 'UserController::index');
     $routes->post('users/', 'UserController::create');
-    $routes->get('users/(:any)', 'UserController::show/$1');
-    $routes->post('users/update/(:any)', 'UserController::update/$1');
-    $routes->delete('users/(:any)', 'UserController::delete/$1');
+    $routes->get('users/(:segment)', 'UserController::show/$1');
+    $routes->post('users/update/(:segment)', 'UserController::update/$1');
+    $routes->delete('users/(:segment)', 'UserController::delete/$1');
     
     $routes->get('auth/user', 'AuthController::authUser');
     $routes->post('auth/token', 'AuthController::login');
 
     $routes->get('events/', 'EventsController::index');
     $routes->post('events/', 'EventsController::create');
-    $routes->get('events/(:any)', 'EventsController::show/$1');
-    $routes->post('events/update/(:any)', 'EventsController::update/$1');
-    $routes->delete('events/(:any)', 'EventsController::delete/$1');
-    $routes->get('events/checkUserInAnEvent/(:any)/(:any)', 'PartisipantEventController::checkUserInAnEvent/$1/$2');
-    $routes->post('events/join/(:any)', 'PartisipantEventController::joinEvent/$1');
-    $routes->get('events/getEventsByUserJoined/(:any)', 'PartisipantEventController::getEventsByUserJoined/$1');
-    $routes->get('events/getCountPartisipant/(:any)', 'PartisipantEventController::getCountPartisipantByEvent/$1');
-    $routes->post('events/finish/(:any)', 'StatusController::finishEvent/$1');
+    $routes->get('events/(:segment)', 'EventsController::show/$1');
+    $routes->post('events/update/(:segment)', 'EventsController::update/$1');
+    $routes->delete('events/(:segment)', 'EventsController::delete/$1');
+    $routes->get('events/checkUserInAnEvent/(:segment)/(:segment)', 'PartisipantEventController::checkUserInAnEvent/$1/$2');
+    $routes->post('events/join/(:segment)', 'PartisipantEventController::joinEvent/$1');
+    $routes->get('events/getEventsByUserJoined/(:segment)', 'PartisipantEventController::getEventsByUserJoined/$1');
+    $routes->get('events/getCountPartisipant/(:segment)', 'PartisipantEventController::getCountPartisipantByEvent/$1');
+    $routes->post('events/finish/(:segment)', 'StatusController::finishEvent/$1');
 
     $routes->get('reports/', 'ReportsController::index');
     $routes->post('reports/', 'ReportsController::create');
-    $routes->get('reports/(:any)', 'ReportsController::show/$1');
-    $routes->post('reports/update/(:any)', 'ReportsController::update/$1');
-    $routes->delete('reports/(:any)', 'ReportsController::delete/$1');
+    $routes->get('reports/(:segment)', 'ReportsController::show/$1');
+    $routes->post('reports/update/(:segment)', 'ReportsController::update/$1');
+    $routes->delete('reports/(:segment)', 'ReportsController::delete/$1');
 
     $routes->get('blogs/', 'BlogsController::index');
     $routes->post('blogs/', 'BlogsController::create');
-    $routes->get('blogs/(:any)', 'BlogsController::show/$1');
-    $routes->post('blogs/update/(:any)', 'BlogsController::update/$1');
-    $routes->delete('blogs/(:any)', 'BlogsController::delete/$1');
+    $routes->get('blogs/(:segment)', 'BlogsController::show/$1');
+    $routes->post('blogs/update/(:segment)', 'BlogsController::update/$1');
+    $routes->delete('blogs/(:segment)', 'BlogsController::delete/$1');
 
-    $routes->post('status/acceptReport/(:any)', 'StatusController::acceptReport/$1');
+    $routes->post('status/acceptReport/(:segment)', 'StatusController::acceptReport/$1');
+    $routes->get('status/getEventDoneByDate', 'StatusController::getEventDoneByDate');
 });
 
 /*

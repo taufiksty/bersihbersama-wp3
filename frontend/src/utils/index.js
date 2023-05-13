@@ -12,3 +12,8 @@ export const toTitleCase = (str) => {
 		return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 	});
 };
+
+export const dateFormat = (date) => {
+	const dateSplit = date.split('-');
+	return `${dateSplit[2]}/${dateSplit[1]}/${dateSplit[0]}`;
+};

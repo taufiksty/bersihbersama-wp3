@@ -6,7 +6,7 @@ import About from '../components/Homepage/AboutSection';
 import BlogCard from '../components/Homepage/BlogSection';
 import Event from '../components/Homepage/EventSection';
 import Footer from '../components/Partials/Footer';
-import ModalConfirm from '../components/Partials/modalConfirm';
+import ModalConfirm from '../components/Partials/modals/modalConfirm';
 import ModalAddReport from '../components/Partials/modals/reports/modalAddReport';
 import AlertSuccess from '../components/Partials/alerts/AlertSuccessCenter';
 import ButtonAddReport from '../components/Partials/buttons/AddReportFloatingButton';
@@ -20,11 +20,11 @@ export default function Homepage() {
 	const location = useLocation();
 
 	const [modalAddReport, setModalAddReport] = React.useState(false);
-	const [alertSuccess, setAlertSuccess] = React.useState(
-		location.state?.isSuccess || false,
-		location.state?.message,
-		location.state?.variant
-	);
+	const [alertSuccess, setAlertSuccess] = React.useState({
+		isSuccess: location.state?.isSuccess || false,
+		message: location.state?.message,
+		variant: location.state?.variant,
+	});
 
 	const handleLogout = (e) => {
 		e.preventDefault();
@@ -52,7 +52,7 @@ export default function Homepage() {
 			<Footer />
 
 			{/* Alert Success */}
-			{alertSuccess && (
+			{alertSuccess.isSuccess && (
 				<AlertSuccess
 					message={alertSuccess.message}
 					variant={alertSuccess.variant}

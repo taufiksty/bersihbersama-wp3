@@ -17,19 +17,19 @@ class PartisipantEventController extends BaseController
 
     private function verifyUserInAnEvent($eventId, $userId)
     {
-        $query = "SELECT * FROM Partisipant_Event WHERE event_id = {$eventId} AND user_id = {$userId}";
+        $query = "SELECT * FROM Partisipant_Event WHERE event_id = '{$eventId}' AND user_id = '{$userId}'";
         $result = $this->db->query($query)->getResult();
 
-        if (!count($result)) {
-            return false;
-        } else {
+        if (count($result) > 0) {
             return true;
+        } else {
+            return false;
         }
     }
 
     public function checkUserInAnEvent($eventId, $userId)
     {
-        $query = "SELECT * FROM Partisipant_Event WHERE event_id = {$eventId} AND user_id = {$userId}";
+        $query = "SELECT * FROM Partisipant_Event WHERE event_id = '{$eventId}' AND user_id = '{$userId}'";
         $result = $this->db->query($query)->getResult();
 
         if (count($result) > 0) {
@@ -75,7 +75,7 @@ class PartisipantEventController extends BaseController
         }
 
         $id = uniqid('part_event-');
-        $query = "INSERT INTO Partisipant_Event (id, event_id, user_id) VALUES ({$id}, {$data['eventId']}, {$data['userId']})";
+        $query = "INSERT INTO Partisipant_Event (id, event_id, user_id) VALUES ('{$id}', '{$data['eventId']}', '{$data['userId']}')";
         $this->db->query($query);
 
         return $this->response->setJSON([
@@ -86,7 +86,7 @@ class PartisipantEventController extends BaseController
 
     public function getEventsByUserJoined($userId)
     {
-        $query = "SELECT * FROM Events RIGHT JOIN Partisipant_Event ON Partisipant_Event.event_id = Events.id WHERE Partisipant_Event.user_id = {$userId}";
+        $query = "SELECT * FROM Events RIGHT JOIN Partisipant_Event ON Partisipant_Event.event_id = Events.id WHERE Partisipant_Event.user_id = '{$userId}'";
         $result = $this->db->query($query)->getResult();
 
         return $this->response->setJSON([
@@ -97,7 +97,7 @@ class PartisipantEventController extends BaseController
 
     public function getCountPartisipantByEvent($eventId)
     {
-        $query = "SELECT COUNT(*) AS partisipant_count FROM Partisipant_Event WHERE event_id = {$eventId}";
+        $query = "SELECT COUNT(*) AS partisipant_count FROM Partisipant_Event WHERE event_id = '{$eventId}'";
         $result = $this->db->query($query)->getRow(0);
 
         return $this->response->setJSON([

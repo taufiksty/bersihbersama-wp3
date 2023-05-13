@@ -8,7 +8,7 @@ import TableEvents from '../components/Admin/Events';
 import TableReports from '../components/Admin/Reports';
 import TableBlogs from '../components/Admin/Blogs';
 import AlertSuccess from '../components/Partials/alerts/AlertSuccessCenter';
-import ModalConfirm from '../components/Partials/modalConfirm';
+import ModalConfirm from '../components/Partials/modals/modalConfirm';
 
 export default function Admin() {
 	const location = useLocation();

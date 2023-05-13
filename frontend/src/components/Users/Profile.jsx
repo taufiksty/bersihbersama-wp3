@@ -1,16 +1,28 @@
 import React from 'react';
-import Navbar from '../Partials/navbarUser';
-import ModalConfirm from '../Partials/modalConfirm';
+import Navbar from './Navbar';
+import ModalConfirm from '../Partials/modals/modalConfirm';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import ModalUpdateUser from '../Partials/modals/users/modalUpdateUser';
+import AlertSuccess from '../Partials/alerts/AlertSuccessCenter';
 
-export default function Profile(props) {
+export default function Profile() {
 	const credentials = localStorage.getItem('credentials')
 		? JSON.parse(localStorage.getItem('credentials'))
 		: '';
 
+	const location = useLocation();
+
 	const [dataReportsByUser, setDataReportsByUser] = React.useState([]);
 	const [dataEventsByUser, setDataEventsByUser] = React.useState([]);
+	const [showModalUpdateUser, setShowModalUpdateUser] = React.useState({
+		isShow: false,
+		user: {},
+	});
+	const [alertSuccess, setAlertSuccess] = React.useState({
+		isSuccess: location.state?.isSuccess,
+		message: location.state?.message,
+	});
 
 	// Fetch Data Reports By User
 	React.useEffect(() => {
@@ -19,7 +31,7 @@ export default function Profile(props) {
 				.get(
 					`http://localhost:8080/api/v1/reports?user_id=${credentials.user.id}`,
 					{
-						headers: { Authorization: `Bearer ${props.token}` },
+						headers: { Authorization: `Bearer ${credentials.token}` },
 					}
 				)
 				.then((response) => setDataReportsByUser(response.data.data))
@@ -79,7 +91,22 @@ export default function Profile(props) {
 										<a
 											onClick={() =>
 												navigate(`/events/${r.event_id}`, {
-													state: { dataEvent: r },
+													state: {
+														dataEvent: {
+															id: r.event_id,
+															title: r.title,
+															description: r.description,
+															address: r.address,
+															district: r.district,
+															city: r.city,
+															province: r.province,
+															link_map: r.link_map,
+															date: r.date,
+															total_people: r.total_people,
+															link_groupwa: r.link_groupwa,
+															images: r.images,
+														},
+													},
 												})
 											}
 											className="text-primary-600 dark:text-primary-500 hover:underline cursor-pointer">
@@ -107,7 +134,7 @@ export default function Profile(props) {
 			</table>
 		</div>
 	);
-	
+
 	return (
 		<div>
 			<Navbar
@@ -129,11 +156,19 @@ export default function Profile(props) {
 						{credentials.user.district}, {credentials.user.city},{' '}
 						{credentials.user.province}
 					</p>
-					<p className="mt-3 text-xs">
+					<p className="my-3 text-xs">
 						{credentials.user.role == 1 ? 'Admin' : 'Partisipan'}
 					</p>
 				</div>
-				<div className="mt-7">
+				<button
+					type="button"
+					onClick={() =>
+						setShowModalUpdateUser({ isShow: true, user: credentials.user })
+					}
+					className="my-5 py-1.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-600 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+					Ubah data profil
+				</button>
+				<div className="mt-3">
 					<RowActivityUser
 						title="Aduan Anda"
 						data={dataReportsByUser}
@@ -151,6 +186,27 @@ export default function Profile(props) {
 				message="Anda yakin ingin keluar?"
 				handleYes={handleLogout}
 			/>
+			{showModalUpdateUser.isShow && (
+				<ModalUpdateUser
+					user={showModalUpdateUser.user}
+					setIsShow={() => setShowModalUpdateUser({ isShow: false, user: {} })}
+					token={credentials.token}
+				/>
+			)}
+			{alertSuccess.isSuccess ? (
+				<AlertSuccess
+					message={alertSuccess.message}
+					setAlertSuccess={() => {
+						setAlertSuccess((oldState) => ({
+							...oldState,
+							isSuccess: false,
+						}));
+						window.history.replaceState(null, '', location.pathname);
+					}}
+				/>
+			) : (
+				''
+			)}
 		</div>
 	);
 }

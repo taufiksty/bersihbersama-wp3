@@ -16,12 +16,10 @@ class PartisipantEvent extends Migration
             'event_id' => [
                 'type' => 'CHAR',
                 'constraint' => 50,
-                'null' => false
             ],
             'user_id' => [
                 'type' => 'CHAR',
                 'constraint' => 50,
-                'null' => false
             ],
         ]);
         $this->forge->addPrimaryKey('id');

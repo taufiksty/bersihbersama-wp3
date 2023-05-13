@@ -1,8 +1,8 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Navbar from './navbarUser';
-import Footer from './Footer';
-import ModalConfirm from './modalConfirm';
+import Navbar from '../components/Users/Navbar';
+import Footer from '../components/Partials/Footer';
+import ModalConfirm from '../components/Partials/modals/modalConfirm';
 import axios from 'axios';
 
 export default function BlogDetails() {

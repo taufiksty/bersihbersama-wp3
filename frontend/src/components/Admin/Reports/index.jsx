@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import ModalShowReport from '../../Partials/modalShowReport';
+import ModalShowReport from '../../Partials/modals/reports/modalShowReport';
 
 export default function TableReports(props) {
 	const [data, setData] = React.useState([]);
