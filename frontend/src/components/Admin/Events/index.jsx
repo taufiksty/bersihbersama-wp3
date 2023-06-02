@@ -119,7 +119,7 @@ export default function TableEvents(props) {
 						{item.done == 0 ? (
 							<button
 								type="button"
-								className="font-medium block pt-2 text-blue-600 dark:text-blue-500 hover:underline"
+								className="block pt-2 font-medium text-blue-600 dark:text-blue-500 hover:underline"
 								onClick={() =>
 									setShowModalUpdateEvent({ isShow: true, event: item })
 								}>
@@ -133,7 +133,7 @@ export default function TableEvents(props) {
 							onClick={() =>
 								setShowModalDeleteEvent({ isShow: true, event: item })
 							}
-							className="button-delete font-medium block pt-2 text-red-600 dark:text-blue-500 hover:underline">
+							className="block pt-2 font-medium text-red-600 button-delete dark:text-blue-500 hover:underline">
 							Hapus
 						</button>
 					</td>
@@ -142,7 +142,7 @@ export default function TableEvents(props) {
 		};
 
 		return (
-			<table className="w-full mt-2 text-xs text-left rounded shadow-md text-gray-500 dark:text-gray-400">
+			<table className="w-full mt-2 text-xs text-left text-gray-500 rounded shadow-md dark:text-gray-400">
 				<thead className="text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
 					<tr>
 						<Columns />

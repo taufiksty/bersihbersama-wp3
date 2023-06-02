@@ -54,7 +54,7 @@ class ReportsController extends ResourceController
         $imagesName = [];
 
         $dateTime = new DateTime();
-        $currentDateTime = $dateTime->format('Y-m-d;H:i:s');
+        $currentDateTime = $dateTime->format('Y-m-d_H-i-s');
 
         for ($i = 0; $i < count($images['name']); $i++) {
             $imageNameBeforeFormatted = $images['name'][$i];
@@ -123,7 +123,7 @@ class ReportsController extends ResourceController
             }
 
             $dateTime = new DateTime();
-            $currentDateTime = $dateTime->format('Y-m-d;H:i:s');
+            $currentDateTime = $dateTime->format('Y-m-d_H-i-s');
 
             $imagesName = [];
             for ($i = 0; $i < count($images['name']); $i++) {

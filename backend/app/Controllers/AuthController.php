@@ -61,11 +61,4 @@ class AuthController extends BaseController
             return $this->response->setJSON(['err_message' => $th->getMessage()])->setStatusCode(400);
         }
     }
-
-    // public function logout()
-    // {
-    //     unset($_SERVER['HTTP_AUTHORIZATION']);
-
-    //     return $this->response->setJSON(['success' => true, 'message' => 'OK']);
-    // }
 }

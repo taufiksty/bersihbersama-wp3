@@ -45,7 +45,7 @@ class EventsController extends ResourceController
         $images = $_FILES['image'];
 
         $dateTime = new DateTime();
-        $currentDateTime = $dateTime->format('Y-m-d;H:i:s');
+        $currentDateTime = $dateTime->format('Y-m-d_H-i-s');
 
         $imagesName = [];
 
@@ -117,7 +117,7 @@ class EventsController extends ResourceController
             }
 
             $dateTime = new DateTime();
-            $currentDateTime = $dateTime->format('Y-m-d;H:i:s');
+            $currentDateTime = $dateTime->format('Y-m-d_H-i-s');
 
             $imagesName = [];
             for ($i = 0; $i < count($images['name']); $i++) {

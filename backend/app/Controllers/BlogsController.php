@@ -41,7 +41,7 @@ class BlogsController extends ResourceController
     }
 
     $dateTime = new DateTime();
-    $currentDateTime = $dateTime->format('Y-m-d;H:i:s');
+    $currentDateTime = $dateTime->format('Y-m-d_H-i-s');
 
     if ($image) move_uploaded_file($image['tmp_name'], 'images/blogs/' . $currentDateTime . '-' . $image['name']);
 
@@ -94,7 +94,7 @@ class BlogsController extends ResourceController
 
     if ($image) {
       $dateTime = new DateTime();
-      $currentDateTime = $dateTime->format('Y-m-d;H:i:s');
+      $currentDateTime = $dateTime->format('Y-m-d_H-i-s');
 
       if ($blog['image']) {
         if ($blog['image'] != 'default.png') unlink('images/blogs/' . $blog['image']);

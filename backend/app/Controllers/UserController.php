@@ -90,7 +90,7 @@ class UserController extends ResourceController
         }
 
         $dateTime = new DateTime();
-        $currentDateTime = $dateTime->format('Y-m-d;H:i:s');
+        $currentDateTime = $dateTime->format('Y-m-d_H-i-s');
 
         $imageName = $image['name'];
         $newImageName = "$currentDateTime-$imageName";
