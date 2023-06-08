@@ -18,23 +18,23 @@ export default function Print() {
 		axios
 			.get(
 				`http://localhost:8080/api/v1/status/getEventDoneByDate?month=${date.month}&year=${date.year}`,
-				{ headers: { Authorization: `Bearer ${token}` } }
+				{ headers: { Authorization: `Bearer ${token}` } },
 			)
 			.then((response) => setData(response.data.data));
 	}, []);
 
 	setTimeout(() => {
 		window.print();
-  }, 1000);
+	}, 1000);
 
 	return (
 		<div className="mx-12">
 			<div className="mt-10 pb-3 border-b-2 border-gray-300 shadow-md">
-				<a className="flex items-center">
+				<div className="flex items-center pl-7 py-2">
 					<span className="self-center text-3xl lg:ml-2 font-semibold whitespace-nowrap text-primary-600 dark:text-white">
 						BersihBersama
 					</span>
-				</a>
+				</div>
 			</div>
 			<div className="mt-3 text-center">
 				<p className="font-bold text-2xl mt-6 mb-2">Laporan Kegiatan Selesai</p>
@@ -88,7 +88,7 @@ export default function Print() {
 											key={imi}
 											className="max-w-[100px] rounded-md"
 											src={`http://localhost:8080/images/events_done/${decodeURI(
-												image
+												image,
 											)}`}
 											alt=""
 										/>

@@ -32,7 +32,7 @@ export default function Profile() {
 					`http://localhost:8080/api/v1/reports?user_id=${credentials.user.id}`,
 					{
 						headers: { Authorization: `Bearer ${credentials.token}` },
-					}
+					},
 				)
 				.then((response) => setDataReportsByUser(response.data.data))
 				.catch((error) => console.log(error));
@@ -49,7 +49,7 @@ export default function Profile() {
 					`http://localhost:8080/api/v1/events/getEventsByUserJoined/${credentials.user.id}`,
 					{
 						headers: { Authorization: `Bearer ${credentials.token}` },
-					}
+					},
 				)
 				.then((response) => setDataEventsByUser(response.data.data))
 				.catch((error) => console.log(error));
@@ -152,10 +152,14 @@ export default function Profile() {
 					<p className="text-sm">{credentials.user.email}</p>
 					<p className="text-xs">{credentials.user.sm_account}</p>
 					<p className="mt-3 text-xs">{credentials.user.address}</p>
-					<p className="text-xs">
-						{credentials.user.district}, {credentials.user.city},{' '}
-						{credentials.user.province}
-					</p>
+					{credentials.user.city ? (
+						<p className="text-xs">
+							{credentials.user.district}, {credentials.user.city},{' '}
+							{credentials.user.province}
+						</p>
+					) : (
+						''
+					)}
 					<p className="my-3 text-xs">
 						{credentials.user.role == 1 ? 'Admin' : 'Partisipan'}
 					</p>

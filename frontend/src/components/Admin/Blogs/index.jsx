@@ -58,6 +58,7 @@ export default function TableBlogs(props) {
 					name == 'updated_at' ||
 					name == 'excerpt' ||
 					name == 'content' ||
+					name == 'user_id' ||
 					name == 'image' ? (
 					''
 				) : (
@@ -85,7 +86,6 @@ export default function TableBlogs(props) {
 						className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
 						{item.title}
 					</th>
-					<td className="px-6 py-4">{item.user_id}</td>
 					<td className="px-6 py-4">{item.category}</td>
 					<td className="px-6 py-4">{item.created_at}</td>
 					<td className="p-4">

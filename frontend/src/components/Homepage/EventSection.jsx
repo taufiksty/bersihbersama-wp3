@@ -40,6 +40,7 @@ export default function Event(props) {
 					state: { isError: true, message: 'Anda harus masuk dahulu.' },
 			  })
 			: navigate('/events');
+		window.location.reload();
 	};
 
 	return (

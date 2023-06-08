@@ -63,7 +63,7 @@ class StatusController extends BaseController
         $imagesName = [];
 
         $dateTime = new DateTime();
-        $currentDateTime = $dateTime->format('Y-m-d;H:i:s');
+        $currentDateTime = $dateTime->format('Y-m-d_H-i-s');
 
         for ($i = 0; $i < count($images['name']); $i++) {
             $imageNameBeforeFormatted = $images['name'][$i];

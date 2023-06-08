@@ -35,6 +35,7 @@ export default function BlogCard(props) {
 					state: { isError: true, message: 'Anda harus masuk dahulu.' },
 			  })
 			: navigate('/blogs');
+		window.location.reload();
 	};
 
 	return (

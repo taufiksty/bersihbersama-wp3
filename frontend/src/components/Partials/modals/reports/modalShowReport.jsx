@@ -1,19 +1,22 @@
 import axios from 'axios';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function ModalShowReport({ report, setIsShow, token }) {
 	const [user, setUser] = React.useState({});
 	const [current, setCurrent] = React.useState(0);
 
+	const navigate = useNavigate();
+
 	const next = () => {
 		setCurrent(
-			current === JSON.parse(report.images).length - 1 ? 0 : current + 1
+			current === JSON.parse(report.images).length - 1 ? 0 : current + 1,
 		);
 	};
 
 	const prev = () => {
 		setCurrent(
-			current === 0 ? JSON.parse(report.images).length - 1 : current - 1
+			current === 0 ? JSON.parse(report.images).length - 1 : current - 1,
 		);
 	};
 
@@ -40,11 +43,13 @@ export default function ModalShowReport({ report, setIsShow, token }) {
 		axios
 			.post(
 				`http://localhost:8080/api/v1/status/acceptReport/${report.id}`,
-				{ headers: { Authorization: `Bearer ${token}` } }
+				null,
+				{
+					headers: { Authorization: `Bearer ${token}` },
+				},
 			)
-      .then((response) => {
-				if (response.data.success) {
-					setIsShow();
+			.then((response) => {
+				if (response.status === 200) {
 					navigate('/admin', {
 						state: {
 							menu: 'reports',
