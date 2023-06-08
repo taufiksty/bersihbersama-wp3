@@ -37,6 +37,7 @@ export default function ModalShowReport({ report, setIsShow, token }) {
 		const days = Math.floor(diffInMilliseconds / millisecondsPerDay);
 		return days;
 	}
+	console.log();
 
 	const handleAcceptReport = (e) => {
 		e.preventDefault();
